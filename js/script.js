@@ -49,20 +49,13 @@ $(function(){
 		var formPosition = self.position();
 		var popX = formPosition.left + self.width();
 		var popY = formPosition.top + self.height();
-		tdPosition =[$(this).index(),$(this).parent().index() -1]; //refet X and Y
 		var what = $(this).children('ul').children('li:first-child').html();
 		var location = $(this).children('ul').children('li:last-child').html();
 		var dateEnd = $(this).children('ul').attr('date-end');
 		var getThisEventId =  $(this).children('ul').attr('id');
+		tdPosition =[$(this).index(),$(this).parent().index() -1]; //refet X and Y
 		returnThisEventId = $(this).children('ul').attr('id');
 
-		// if(getThisEventId){
-		// 	var endTimeRegisted = db[getThisEventId].dateEnd.replace(':','') - 0 < 1000? '0'+ db[getThisEventId].dateEnd : db[getThisEventId].dateEnd;
-		// 	console.log(endTimeRegisted);
-		// 	$('#submitForm #dateEnd').val(endTimeRegisted);
-		// }
-
-		// console.log(db);
 		$('#submitForm #event').val(what);
 		$('#submitForm #location').val(location);
 		if(dateEnd){
@@ -140,6 +133,7 @@ $(function(){
 		};
 		console.log(toPut.uniqueId)
 		if(elapse > 0){
+			//put method
 			if(returnThisEventId){
 				$.ajax({
 					url: './put.php',
@@ -152,6 +146,7 @@ $(function(){
 					}
 				});
 			}else if(typeof(returnThisEventId)=='undefined'){
+				//post method
 				$.post('../calendar/method.php',toPost).done(function(){
 						record.push('新增记录'+':'+what+','+location+','+week[tdPosition[0]]+','+startDate+'-'+endDate);
 						console.log(record);
@@ -162,14 +157,7 @@ $(function(){
 				});
 			}
 		}
-
-
 	})
-	//close form
-	$('#close').on('click',function(){
-		$('#submitForm').hide(300);
-	})
-	//put method
 
 	//delete method
 	$('#delete').on('click',function(e){
@@ -182,6 +170,11 @@ $(function(){
 					window.location.reload();
     	}
 		});
+	})
+
+	//close form
+	$('#close').on('click',function(){
+		$('#submitForm').hide(300);
 	})
 
 })
