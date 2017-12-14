@@ -22,8 +22,8 @@
 				 $jsondata = json_encode($arr_data, JSON_PRETTY_PRINT);
 
 				 if(file_put_contents($myFile, $jsondata)) {
-			        echo 'Data successfully saved';
-							var_dump($arr_data);
+					 		header('Content-Type: application/json');
+			        echo json_encode($arr_data);
 			    }
 			   else{
 			        echo "error";

@@ -7,37 +7,40 @@ $(function(){
 	var week = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 	var returnThisEventId;
 	var record =[];
-	//get method
-	$.get('../calendar/data.json',function(data, status){
-		uniqueName = Object.keys(data)[Object.keys(data).length-1];
-		if(!data[uniqueName]){
-			uniqueId = 0;
-		}else{
-			uniqueId = data[uniqueName].uniqueId - 0 + 1;
-		}
-		console.log(uniqueId);
-
-		Object.keys(data).forEach(function(i){
-			var what = data[i].event;
-			var location = data[i].location;
-			var whatday = data[i].whatday;
-			var uniqueId = data[i].uniqueId;
-			var start  = data[i].dateStart.replace(':','') - 0;
-			var end  = data[i].dateEnd.replace(':','') - 0;
-			var dateEnd = end <1000? '0'+ data[i].dateEnd : data[i].dateEnd;
-			var elapse = end - start;
-			var registerEvent = "<ul class='eventRegister' date-end="+dateEnd+" id="+uniqueId+"><li>"+what+"</li><li>"+location+"</li></ul>";
-			var x = week.indexOf(whatday);
-			var y = Math.floor(start/100+1);
-
-			$('tbody tr:eq('+y+') td:eq('+x+')').html(registerEvent);
-			$('#'+uniqueId).css({
-				height: elapse/100 * 70+'px',
-				backgroundColor: '#0F222F' //+Math.floor(Math.random()*1000000)
-			})
+	//init get
+	function getInit(){
+		$.get('../calendar/data.json',function(data, status){
+			uniqueName = Object.keys(data)[Object.keys(data).length-1];
+			//initial uniqueId
+			if(!data[uniqueName]){
+				uniqueId = 0;
+			}else{
+				uniqueId = data[uniqueName].uniqueId - 0 + 1;
+			}
+			//iterate data from data.json
+			Object.keys(data).forEach(function(i){
+				var what = data[i].event;
+				var location = data[i].location;
+				var whatday = data[i].whatday;
+				var uniqueId = data[i].uniqueId;
+				var start  = data[i].dateStart.replace(':','') - 0;
+				var end  = data[i].dateEnd.replace(':','') - 0;
+				var dateEnd = end <1000? '0'+ data[i].dateEnd : data[i].dateEnd;
+				var elapse = end - start;
+				var registerEvent = "<ul class='eventRegister' date-end="+dateEnd+" id="+uniqueId+"><li>"+what+"</li><li>"+location+"</li></ul>";
+				var x = week.indexOf(whatday);
+				var y = Math.floor(start/100+1);
+				//render element
+				$('tbody tr:eq('+y+') td:eq('+x+')').html(registerEvent);
+				$('#'+uniqueId).css({
+					height: elapse/100 * 70+'px',
+					backgroundColor: '#0F222F' //+Math.floor(Math.random()*1000000)
+				})
+			});
+			db = data;
 		});
-		db = data;
-	});
+	}
+	getInit();
 
 
 	//form popup trigger
@@ -58,7 +61,7 @@ $(function(){
 
 		$('#submitForm #event').val(what);
 		$('#submitForm #location').val(location);
-		if(dateEnd){
+		if(dateEnd !== undefined){
 			$('#dateEnd').val(dateEnd);
 			var endTime = tdPosition[1]+1;
 			var defaultStartTime = tdPosition[1]<10 ? '0'+tdPosition[1]+':00':tdPosition[1]+':00';
@@ -66,18 +69,15 @@ $(function(){
 		}else{
 			var endTime = tdPosition[1]+1;
 			var defaultStartTime = tdPosition[1]<10 ? '0'+tdPosition[1]+':00':tdPosition[1]+':00';
-			var defaultEndTime = tdPosition[1]<9 ? '0'+endTime+':00':endTime+':00';
+			var defaultEndTime = endTime<10 ? '0'+endTime+':00':endTime+':00';
 			$('#dateStart').attr('value',defaultStartTime);
-			$('#dateEnd').attr('value',defaultEndTime);
+			$('#dateEnd').val(defaultEndTime);
 		}
-
 		$('#submitForm').css({
 			display:'block',
 			top:popY,
 			left:popX,
 		});
-
-
 	})
 
 	//submit form
@@ -92,8 +92,8 @@ $(function(){
 		var end  = endDate.replace(':','') - 0;
 		var elapse = end - start;
 		var eventOrder = typeof(returnThisEventId)== 'undefined'? uniqueId:returnThisEventId;
-		var data = "<ul class='eventRegister' id="+eventOrder+"><li>"+what+"</li><li>"+location+"</li></ul>";
-
+		var data = "<ul class='eventRegister' date-end="+endDate+" id="+eventOrder+"><li>"+what+"</li><li>"+location+"</li></ul>";
+		console.log(endDate);
 		if(elapse>0){
 
 			self.html(data);
@@ -107,7 +107,9 @@ $(function(){
 			});
 			$('#dateEnd').css({
 				borderBottom:'2px solid black',
-			})
+			});
+
+
 		}else{
 			$('#dateEnd').css({
 				borderBottom:'2px solid red',
@@ -131,7 +133,6 @@ $(function(){
 			dateStart: startDate,
 			dateEnd: endDate,
 		};
-		console.log(toPut.uniqueId)
 		if(elapse > 0){
 			//put method
 			if(returnThisEventId){
@@ -166,8 +167,16 @@ $(function(){
 	    url: './delete.php?uniqueId='+returnThisEventId,
 	    type: 'DELETE',
 	    success: function(result) {
-	        $('#close').click();// Do something with the result
-					window.location.reload();
+					// Do something with the result
+	        $('#close').click();
+					$('#'+returnThisEventId).parent().html('');
+					db = result;
+					uniqueId = Object.keys(db)[Object.keys(db).length-1]-0 + 1;
+					if(isNaN(uniqueId)){
+						uniqueId = 0;
+					}else{
+						uniqueId = uniqueId;
+					}
     	}
 		});
 	})
