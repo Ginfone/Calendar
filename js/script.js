@@ -7,6 +7,7 @@ $(function(){
 	var week = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 	var returnThisEventId;
 	var record =[];
+	var delData ={};
 	//init get
 	function getInit(){
 		$.get('../calendar/data.json',function(data, status){
@@ -41,6 +42,7 @@ $(function(){
 		});
 	}
 	getInit();
+
 	//color random pickup
 	function color(){
 		var color = ['#E6553F','#F8EBC2','#66A8A6','#79896E','#0F222F'];
@@ -48,11 +50,9 @@ $(function(){
 	}
 
 	//form popup trigger
-	$('.calendar td').on('click',function(){
-
-
+	$('.calendar td').on('click',function (){
 		self = $(this);
-		//form position
+		//get info from element
 		var formPosition = self.position();
 		var popX = formPosition.left + self.width();
 		var popY = formPosition.top + self.height();
@@ -62,6 +62,13 @@ $(function(){
 		var getThisEventId =  $(this).children('ul').attr('id');
 		tdPosition =[$(this).index(),$(this).parent().index() -1]; //refet X and Y
 		returnThisEventId = $(this).children('ul').attr('id');
+		delData ={
+			what:what,
+			location:location,
+			whatday:week[tdPosition[0]],
+			startDate:tdPosition[1]+':00',
+			endDate:dateEnd
+		};
 
 		$('#submitForm #event').val(what);
 		$('#submitForm #location').val(location);
@@ -83,7 +90,6 @@ $(function(){
 			left:popX,
 		});
 	})
-
 	//submit form
 	$('#submit').on('click',function(e){
 		e.preventDefault();
@@ -145,16 +151,16 @@ $(function(){
 					type: 'POST',
 					data: toPut,
 					success: function() {
-							record.push('修改记录'+':'+what+','+location+','+week[tdPosition[0]]+','+startDate+'-'+endDate);
-							console.log(record);
+							record.push('修改记录:</br>'+what+',</br>'+location+',</br>'+week[tdPosition[0]]+',</br>'+startDate+'-'+endDate);
+							$('#record ul').append('<li>'+record[record.length-1]+'</li>');
 							$('#close').click();// Do something with the result
 					}
 				});
 			}else if(typeof(returnThisEventId)=='undefined'){
 				//post method
 				$.post('../calendar/method.php',toPost).done(function(){
-						record.push('新增记录'+':'+what+','+location+','+week[tdPosition[0]]+','+startDate+'-'+endDate);
-						console.log(record);
+						record.push('新增记录:</br>'+what+',</br>'+location+',</br>'+week[tdPosition[0]]+',</br>'+startDate+'-'+endDate);
+						$('#record ul').append('<li>'+record[record.length-1]+'</li>');
 						uniqueId++;
 					$.get('../calendar/data.json',function(data, status){
 						db = data;
@@ -172,6 +178,8 @@ $(function(){
 	    type: 'DELETE',
 	    success: function(result) {
 					// Do something with the result
+					record.push('删除记录:</br>'+delData.what+',</br>'+delData.location+',</br>'+delData.whatday+',</br>'+delData.startDate+'-'+delData.endDate);
+					$('#record ul').append('<li>'+record[record.length-1]+'</li>');
 	        $('#close').click();
 					$('#'+returnThisEventId).parent().html('');
 					db = result;

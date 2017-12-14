@@ -1,26 +1,26 @@
 {
+    "2": {
+        "uniqueId": "2",
+        "event": "Ginfone",
+        "location": "Somewhere",
+        "whatday": "Wed",
+        "dateStart": "3:00",
+        "dateEnd": "4:00"
+    },
     "3": {
         "uniqueId": "3",
-        "event": "Ginfone",
-        "location": "Hello",
+        "event": "Stuff",
+        "location": "Somewhere",
         "whatday": "Thu",
-        "dateStart": "5:00",
-        "dateEnd": "7:00"
+        "dateStart": "2:00",
+        "dateEnd": "3:00"
     },
     "4": {
         "uniqueId": "4",
-        "event": "Check",
-        "location": "Here",
-        "whatday": "Mon",
+        "event": "Gii",
+        "location": "Home",
+        "whatday": "Sat",
         "dateStart": "4:00",
         "dateEnd": "5:00"
-    },
-    "5": {
-        "uniqueId": "5",
-        "event": "Kiwi",
-        "location": "",
-        "whatday": "Fri",
-        "dateStart": "2:00",
-        "dateEnd": "3:00"
     }
 }

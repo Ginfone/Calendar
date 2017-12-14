@@ -56,6 +56,11 @@
 			?>
 		</tbody>
 	</table>
+	<div id='record'>
+		<ul class="wrapper">
+			<li>This is record</li>
+		</ul>
+	</div>
 	<script src='js/jquery-3.2.1.min.js'></script>
 	<script src='js/script.js'></script>
 </body>

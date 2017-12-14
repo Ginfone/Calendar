@@ -84,3 +84,12 @@
 	top:5%;
 	cursor:pointer;
 }
+#record{
+	background-color:#f4f4f4;
+	width:10%;
+
+	position:fixed;
+	top:0;
+	right:0;
+	font-size:12px;
+}
