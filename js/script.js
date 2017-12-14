@@ -34,14 +34,18 @@ $(function(){
 				$('tbody tr:eq('+y+') td:eq('+x+')').html(registerEvent);
 				$('#'+uniqueId).css({
 					height: elapse/100 * 70+'px',
-					backgroundColor: '#0F222F' //+Math.floor(Math.random()*1000000)
+					backgroundColor: color() //+Math.floor(Math.random()*1000000)
 				})
 			});
 			db = data;
 		});
 	}
 	getInit();
-
+	//color random pickup
+	function color(){
+		var color = ['#E6553F','#F8EBC2','#66A8A6','#79896E','#0F222F'];
+		return color[Math.floor(Math.random()*5)];
+	}
 
 	//form popup trigger
 	$('.calendar td').on('click',function(){
@@ -100,7 +104,7 @@ $(function(){
 
 			$('#'+eventOrder).css({
 				height: elapse/100 * 70+'px',
-				backgroundColor: '#0F222F'
+				backgroundColor: color()
 			})
 			$('#submitForm').css({
 				display:'none',

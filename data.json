@@ -14,5 +14,13 @@
         "whatday": "Mon",
         "dateStart": "4:00",
         "dateEnd": "5:00"
+    },
+    "5": {
+        "uniqueId": "5",
+        "event": "Kiwi",
+        "location": "",
+        "whatday": "Fri",
+        "dateStart": "2:00",
+        "dateEnd": "3:00"
     }
 }
